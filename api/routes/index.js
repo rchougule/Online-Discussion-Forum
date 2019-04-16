@@ -1,22 +1,26 @@
 'use strict'
 
-import { ResponseBody } from '../../lib';
+import { ResponseBody } from '../../lib/ResponseBody';
+import UserRouter from './Users';
+
 
 const routes = [
-    { path: '/user', router: 'xyz router'}
+    { path: '/user', router: UserRouter}
 ];
 
-routes.init = (app) => {
-    // handle error routes or non-existent routes
-
+routes.init = app => {
     if(!app || !app.use) {
         console.error('[Error] Route Initialization Failed: app / app.use is undefined');
         return process.exit(1);
     }
 
+    routes.forEach((route) => {
+        app.use(route.path, route.router)
+    })
+
     app.get('/health-check', (req, res, next) => {
         const responseBody = new ResponseBody(200, 'OK');
-        response.status(responseBody.statusCode).json(responseBody);
+        res.status(responseBody.statusCode).json(responseBody);
     })
 }
 
