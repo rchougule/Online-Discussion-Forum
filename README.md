@@ -2,9 +2,7 @@
 
 # TODO
 ## User Registration
-1. Register user in a separate collection
-2. Generate JWT during Login
-3. Authenticate subsequent requests using JWT
+1. Authenticate subsequent requests using JWT
 
 
 ## Thread and Post
