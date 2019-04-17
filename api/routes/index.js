@@ -1,6 +1,6 @@
 'use strict'
 
-import { ResponseBody } from '../../lib/ResponseBody';
+import { ResponseBody } from '../../lib';
 import UserRouter from './Users';
 
 
