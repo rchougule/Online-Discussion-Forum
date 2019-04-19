@@ -19,6 +19,7 @@ async function validateAccess(req, res, next) {
     }
     try {
         const verification = jwt.verify(token, secret);
+        req.locals = {email: verification.email};
         next();
     } catch (e) {
         let responseBody = new ResponseBody(500, 'Failed to Authenticate Token', e.toString());

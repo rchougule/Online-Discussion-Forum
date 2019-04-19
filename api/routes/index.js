@@ -2,10 +2,11 @@
 
 import { ResponseBody } from '../../lib';
 import UserRouter from './Users';
-
+import DiscussionRouter from './Discussions';
 
 const routes = [
-    { path: '/user', router: UserRouter}
+    { path: '/user', router: UserRouter},
+    { path: '/thread', router: DiscussionRouter}
 ];
 
 routes.init = app => {
