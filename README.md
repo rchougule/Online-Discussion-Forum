@@ -1,12 +1,8 @@
 # Online-Discussion-Forum
 
 # TODO
-## User Registration
-1. Authenticate subsequent requests using JWT
-
 
 ## Thread and Post
-1. create a Thread and post the first content
 2. post content on existing threads
 3. comment count
 
