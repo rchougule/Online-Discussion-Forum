@@ -1,11 +1,12 @@
 'use strict'
 
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 import { ResponseBody } from '../../lib';
 import { DiscussionSchema, ThreadStatsSchema } from '../schemas';
 
 const Discussion = mongoose.model('Discussion', DiscussionSchema);
 const ThreadStats = mongoose.model('ThreadStats', ThreadStatsSchema);
+mongoose.set("useFindAndModify", false);
 
 export const DiscussionModel = {
     createThread,
@@ -40,12 +41,60 @@ async function addComment(attrs) {
      * check the count of comments in that bucket, update the bucket count in the ThreadStats.
      * This will ensure that the next comment goes in a new bucket.
      */
-    const { discussionId, comment } = attrs;
+    const { discussionId, comment, email } = attrs;
     const threadStats = await ThreadStats.findOne({discussionId}, "currentBucket");
     const { currentBucket } = threadStats;
 
+    let conditions = {
+        discussionId, 
+        bucketNo: currentBucket
+    };
 
+    let update = {
+        $inc: {
+            commentsCount: 1
+        },
+        $push: {
+            comments: {
+                body: comment,
+                date: Date.now(),
+                commentedBy: email
+            }
+        }
+    };
 
+    let options = {
+        upsert: true,
+        new: true,
+        fields: {
+            commentsCount: 1
+        }
+    };
+    
+    const threadUpdate = await Discussion.findOneAndUpdate(conditions, update, options);
+
+    const { commentsCount } = threadUpdate;
+    const bucketInc = commentsCount >= 10 ? 1 : 0;
+
+    conditions = {
+        discussionId
+    };
+
+    update = {
+        $inc: {
+            totalComments: 1,
+            currentBucket: bucketInc
+        }
+    };
+
+    options = {
+        new: true
+    };
+
+    const threadStatsUpdate = await ThreadStats.findOneAndUpdate(conditions, update, options)
+
+    const returnObj = new ResponseBody(201, 'Comment Added', threadUpdate);
+    return returnObj;
 }
 
 async function _generateUniqueID() {

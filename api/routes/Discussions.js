@@ -28,7 +28,7 @@ async function createThread(req, res) {
 async function addComment(req, res) {
     const { body, locals } = req;
     try {
-        const data = await DiscussionModel.addComment(body);
+        const data = await DiscussionModel.addComment({...body, ...locals});
         res.status(data.statusCode).json(data);
     } catch (e) {
         const responseBody = new ResponseBody(500, e.toString());
