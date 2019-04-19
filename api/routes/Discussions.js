@@ -8,6 +8,7 @@ const DiscussionRouter = new express.Router();
 const { validateAccess } = AccessModel;
 
 DiscussionRouter.post('/create-thread', validateAccess, createThread);
+DiscussionRouter.post('/add-comment', validateAccess, addComment);
 
 async function createThread(req, res) {
     const { body, locals } = req;
@@ -17,6 +18,17 @@ async function createThread(req, res) {
     }
     try {
         const data = await DiscussionModel.createThread(attrs);
+        res.status(data.statusCode).json(data);
+    } catch (e) {
+        const responseBody = new ResponseBody(500, e.toString());
+        res.status(responseBody.statusCode).json(responseBody);
+    }
+}
+
+async function addComment(req, res) {
+    const { body, locals } = req;
+    try {
+        const data = await DiscussionModel.addComment(body);
         res.status(data.statusCode).json(data);
     } catch (e) {
         const responseBody = new ResponseBody(500, e.toString());

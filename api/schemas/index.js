@@ -1,2 +1,3 @@
 export * from './Users';
-export * from './Discussion';
+export * from './Discussions';
+export * from './ThreadStats';

@@ -1,3 +1,10 @@
+/**
+ * This file is included in the models since there is a possibility that the validate for access not only depends
+ * on the JWT verification, but also on some parameters which might be stored in the database.
+ * For e.g. Whether the user is allowed to access the specific paths or not.
+ * For e.g. Only a premium user is allowed to access a path which is related to some premimum content.
+ */
+
 'use strict'
 
 import * as jwt from 'jsonwebtoken';
