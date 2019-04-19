@@ -1,6 +1,6 @@
 'use strict'
 
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { ResponseBody } from '../../lib';
 import { DiscussionSchema, ThreadStatsSchema } from '../schemas';
 
