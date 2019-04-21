@@ -1,3 +1,11 @@
+/**
+ * Routes to handle the thread related operations.
+ * a. Creation of a new thread.
+ * b. Adding comments to an existing thread.
+ * 
+ * The above operations are possible only after the request is validated with a valid JWT.
+ */
+
 'use strict';
 
 import express from 'express';

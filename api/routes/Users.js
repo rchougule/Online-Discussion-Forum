@@ -1,3 +1,9 @@
+/**
+ * Routes for the user related operations, i.e.
+ * a. New User Creation
+ * b. Authentication
+ */
+
 'use strict'
 
 import express from 'express';

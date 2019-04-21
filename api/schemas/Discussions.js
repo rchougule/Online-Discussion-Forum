@@ -1,3 +1,10 @@
+/**
+ * Schema of a Discussion Thead
+ * Each thread is divided in buckets of comments. I.e. As soon as comments reach a specific count in that bucket (document),
+ * the further comments are pushed into a new bucket, i.e. a new document of the same thread. This will prevent the 
+ * document from exceeding it's size limit.
+ */
+
 'use strict'
 
 import mongoose from 'mongoose';

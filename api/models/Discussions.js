@@ -1,3 +1,12 @@
+/**
+ * Operations to Handle the Thread related queries. i.e.
+ * a. Thread Creation and Stats initialization
+ * b. Commenting on a thread with stats updation.
+ * 
+ * Stats queries are speed up by using Redis Cache. Stats are updated in the persistent DB via Jobs, to take the load
+ * off the main operation.
+ */
+
 'use strict'
 
 import mongoose from 'mongoose';
@@ -8,10 +17,6 @@ import { Redis } from '../services';
 const Discussion = mongoose.model('Discussion', DiscussionSchema);
 const ThreadStats = mongoose.model('ThreadStats', ThreadStatsSchema);
 mongoose.set("useFindAndModify", false);
-
-Redis.hgetAll("user:rohan").then((result) => {
-    console.log(result);
-})
 
 export const DiscussionModel = {
     createThread,
@@ -40,12 +45,6 @@ async function createThread(attrs) {
 }
 
 async function addComment(attrs) {
-    /**
-     * fetch the current bucket comments count from threadsStat
-     * Add the comment in the discussion thread of that bucket.
-     * check the count of comments in that bucket, update the bucket count in the ThreadStats.
-     * This will ensure that the next comment goes in a new bucket.
-     */
     const { discussionId, comment, email } = attrs;
 
     let threadStats;
@@ -91,23 +90,6 @@ async function addComment(attrs) {
     const threadUpdate = await Discussion.findOneAndUpdate(conditions, update, options);
 
     const bucketInc = threadUpdate.commentsCount >= 10 ? 1 : 0;
-
-    // conditions = {
-    //     discussionId
-    // };
-
-    // update = {
-    //     $inc: {
-    //         totalComments: 1,
-    //         currentBucket: bucketInc
-    //     }
-    // };
-
-    // options = {
-    //     new: true
-    // };
-
-    // const threadStatsUpdate = await ThreadStats.findOneAndUpdate(conditions, update, options)
 
     const threadStatsRedis = {
         totalComments: totalComments + 1,

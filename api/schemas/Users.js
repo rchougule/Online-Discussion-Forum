@@ -1,3 +1,7 @@
+/**
+ * Schema for the User Profile of the Online Discussion Forum
+ */
+
 'use strict'
 
 import mongoose from 'mongoose';

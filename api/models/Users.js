@@ -1,3 +1,9 @@
+/**
+ * Operations to Handle the User related queries, i.e.
+ * a. New User Creation
+ * b. Searching for a user
+ */
+
 'use strict'
 
 import mongoose from 'mongoose';
