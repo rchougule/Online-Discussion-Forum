@@ -3,10 +3,15 @@
 import mongoose from 'mongoose';
 import { ResponseBody } from '../../lib';
 import { DiscussionSchema, ThreadStatsSchema } from '../schemas';
+import { Redis } from '../services';
 
 const Discussion = mongoose.model('Discussion', DiscussionSchema);
 const ThreadStats = mongoose.model('ThreadStats', ThreadStatsSchema);
 mongoose.set("useFindAndModify", false);
+
+Redis.hgetAll("user:rohan").then((result) => {
+    console.log(result);
+})
 
 export const DiscussionModel = {
     createThread,
@@ -42,8 +47,20 @@ async function addComment(attrs) {
      * This will ensure that the next comment goes in a new bucket.
      */
     const { discussionId, comment, email } = attrs;
-    const threadStats = await ThreadStats.findOne({discussionId}, "currentBucket");
-    const { currentBucket } = threadStats;
+
+    let threadStats;
+    try {
+        threadStats = await Redis.hgetAll(`discussion:${discussionId}`);
+        if(!threadStats) {
+            threadStats = await ThreadStats.findOne({discussionId});
+        }
+    } catch (e) {
+        console.error(`[Error] addComment Error : ${e.toString()}`);
+    }
+
+    let { currentBucket, totalComments } = threadStats;
+    currentBucket = parseInt(currentBucket);
+    totalComments = parseInt(totalComments);
 
     let conditions = {
         discussionId, 
@@ -73,25 +90,31 @@ async function addComment(attrs) {
     
     const threadUpdate = await Discussion.findOneAndUpdate(conditions, update, options);
 
-    const { commentsCount } = threadUpdate;
-    const bucketInc = commentsCount >= 10 ? 1 : 0;
+    const bucketInc = threadUpdate.commentsCount >= 10 ? 1 : 0;
 
-    conditions = {
-        discussionId
-    };
+    // conditions = {
+    //     discussionId
+    // };
 
-    update = {
-        $inc: {
-            totalComments: 1,
-            currentBucket: bucketInc
-        }
-    };
+    // update = {
+    //     $inc: {
+    //         totalComments: 1,
+    //         currentBucket: bucketInc
+    //     }
+    // };
 
-    options = {
-        new: true
-    };
+    // options = {
+    //     new: true
+    // };
 
-    const threadStatsUpdate = await ThreadStats.findOneAndUpdate(conditions, update, options)
+    // const threadStatsUpdate = await ThreadStats.findOneAndUpdate(conditions, update, options)
+
+    const threadStatsRedis = {
+        totalComments: totalComments + 1,
+        currentBucket: currentBucket + bucketInc
+    }
+
+    await Redis.hmset(`discussion:${discussionId}`, threadStatsRedis);
 
     const returnObj = new ResponseBody(201, 'Comment Added', threadUpdate);
     return returnObj;
