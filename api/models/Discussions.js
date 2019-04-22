@@ -20,7 +20,8 @@ mongoose.set("useFindAndModify", false);
 
 export const DiscussionModel = {
     createThread,
-    addComment
+    addComment,
+    getThread
 }
 
 async function createThread(attrs) {
@@ -100,6 +101,10 @@ async function addComment(attrs) {
 
     const returnObj = new ResponseBody(201, 'Comment Added', threadUpdate);
     return returnObj;
+}
+
+async function getThread(discussionId) {
+    return new ResponseBody(200, 'Will be available shortly');
 }
 
 async function _generateUniqueID() {
