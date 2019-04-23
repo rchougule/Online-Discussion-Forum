@@ -82,6 +82,7 @@ daemonize yes
 ## How to Run
 1. Install NPM packages ``` npm install ```
 2. Start the Redis-Server with the provided **redis.conf** file or update the above mentioned configs in your existing .conf file. ``` redis-server /path/to/redisConfFile.conf ```
+4. Start the MongoDB Server ``` mongod ```
 3. Start the Node Server ``` node server.js ```
 
 ## APIs
