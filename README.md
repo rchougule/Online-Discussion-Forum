@@ -19,7 +19,7 @@ This project focuses on how you can store and retrieve thread/dicussion related 
 6. Above operations are validated for a user after being authenticated via JWT.
 
 ## Configuration of Redis Server
-###### Memory Management
+**Memory Management**
 1. Memory Policy set as **allkeys-lru**
    1. This will ensure that all the keys existing in the Redis in-memory datastore follow the LRU (Least Recently Used) strategy to get evicted from the memory. This is done to ensure that the keys which are used the least are removed from the datastore to make room for the new ones.
 2. Samples to be considered for the above strategy **maxmemory samples**
@@ -70,7 +70,7 @@ maxmemory-policy allkeys-lru
 maxmemory-samples 9
 ```
 
-###### Daemonize the Redis-Server (Optional)
+**Daemonize the Redis-Server (Optional)**
 1. This will run the Redis-Server as a background process as soon as it is started rather than being in the direct-control of the user.
 ```
 ################################# GENERAL #####################################
