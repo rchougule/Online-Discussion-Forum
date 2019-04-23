@@ -99,7 +99,7 @@ async function addComment(attrs) {
 
     await Redis.hmset(`discussion:${discussionId}`, threadStatsRedis);
 
-    const returnObj = new ResponseBody(201, 'Comment Added', threadUpdate);
+    const returnObj = new ResponseBody(201, 'Comment Added');
     return returnObj;
 }
 

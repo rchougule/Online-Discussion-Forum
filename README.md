@@ -79,6 +79,116 @@ maxmemory-samples 9
 # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
 daemonize yes
 ```
+## How to Run
+1. Install NPM packages ``` npm install ```
+2. Start the Redis-Server with the provided **redis.conf** file or update the above mentioned configs in your existing .conf file. ``` redis-server /path/to/redisConfFile.conf ```
+3. Start the Node Server ``` node server.js ```
+
+## APIs
+1. Create User ***/user/create-user***
+   **Request**
+    ```
+    var options: {
+        method: string;
+        url: string;
+        headers: {
+            'Cache-Control': string;
+            'Content-Type': string;
+        };
+        body: {
+            email: string;
+            password: string;
+        };
+        json: boolean;
+    }
+    ```
+    **Response**
+    ```
+    {
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+            "email": "chougule@gmail.com",
+            "updatedAt": "2019-04-21T13:53:16.751Z",
+            "__v": 0,
+        }
+    }
+    ```
+
+2. Authenticate User ***/user/authenticate***
+    **Request** - Same as **Create User**
+    **Response**
+    ```
+    {
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "email": "chougule@gmail.com",
+            "updatedAt": "2019-04-17T19:42:45.139Z",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNob3VndWxlQGdtYWlsLmNvbSIsInVwZGF0ZWRBdCI6IjIwMTktMDQtMTdUMTk6NDI6NDUuMTM5WiIsImlhdCI6MTU1NTY1OTc2NywiZXhwIjoxNTU1Njk1NzY3fQ.n_J_qh3G8AtMMsYoY4JNREtotvkhJXY1OHvwZnyb-7c"
+        }
+    }
+    ```
+
+3. Create Discussion Thread ***/thread/create-thread***
+    **Request**
+    ```
+    var options: {
+        method: string;
+        url: string;
+        headers: {
+            'Cache-Control': string;
+            'x-access-token': string;
+            'Content-Type': string;
+        };
+        body: {
+            title: string;
+            content: string;
+        };
+        json: boolean;
+    }
+    ```
+    **Response**
+    ```
+    {
+        "statusCode": 201,
+        "message": "Created",
+        "data": {
+            "title": String,
+            "content": String,
+            "createdBy": "xyz@gmail.com",
+            "discussionId": "QLWTE4G",
+            "__v": 0
+        }
+    }
+    ```
+
+4. Add Comment to a Thread ***/thread/add-comment***
+   **Request**
+   ```
+    var options: {
+        method: string;
+        url: string;
+        headers: {
+            'Cache-Control': string;
+            'x-access-token': string;
+            'Content-Type': string;
+        };
+        body: {
+            discussionId: string;
+            comment: string;
+        };
+        json: boolean;
+    }
+   ```
+   **Response**
+   ```
+   {
+        "statusCode": 201,
+        "message": "Comment Added"
+    }
+   ```
+  
 
 ## TODO
 1. Convert the job operation of updation of thread/discussion stats into a separate micro-service.

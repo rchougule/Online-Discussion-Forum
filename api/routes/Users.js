@@ -25,12 +25,6 @@ async function createUser(req, res) {
     try {
         body.password = await bcrypt.hash(body.password, 8);
         const data = await UserModel.createUser(body);
-        const payload = {
-            email: data.data.email,
-            updatedAt: data.data.updatedAt
-        }
-        const token = jwt.sign(payload, secret, { expiresIn: '10h'});
-        data.data.token = token;
         res.status(data.statusCode).json(data);
     } catch (e) {
         const errorObj = new ResponseBody(500, e.toString());
