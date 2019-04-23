@@ -199,3 +199,4 @@ daemonize yes
 1. Convert the job operation of updation of thread/discussion stats into a separate micro-service.
    1. This will reduce the load on the main process.
    2. This can be implemented using Pub-Sub Redis Mechanism.
+2. API to fetch the thread/discussion related data
