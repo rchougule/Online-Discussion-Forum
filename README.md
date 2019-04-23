@@ -86,6 +86,7 @@ daemonize yes
 
 ## APIs
 1. Create User ***/user/create-user***
+
    **Request**
     ```
     var options: {
@@ -116,6 +117,7 @@ daemonize yes
     ```
 
 2. Authenticate User ***/user/authenticate***
+
     **Request** - Same as **Create User**
     **Response**
     ```
@@ -131,6 +133,7 @@ daemonize yes
     ```
 
 3. Create Discussion Thread ***/thread/create-thread***
+
     **Request**
     ```
     var options: {
@@ -164,6 +167,7 @@ daemonize yes
     ```
 
 4. Add Comment to a Thread ***/thread/add-comment***
+
    **Request**
    ```
     var options: {
